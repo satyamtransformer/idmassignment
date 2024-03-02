@@ -18,14 +18,13 @@ public class JDBCTask2 implements JDBCTask2Interface {
         // Task 1: List all primary titles for a specific start year.
         try {
             j = new JDBCTask2();
-            JDBCTask2 hdbc = new JDBCTask2();
-            Collection<String> pmTitle = j.getTitlesPerYear(2002);
-            Iterator<String> it = pmTitle.iterator();
+            Collection<String> result = j.getPlayedCharacters("Amir Khan");
+            Iterator<String> it = result.iterator();
             while(it.hasNext()){
                 System.out.println(it.next());
                 it.remove();
             }
-
+            //System.out.println(result);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -67,7 +66,7 @@ public class JDBCTask2 implements JDBCTask2Interface {
             // 2. Create a preparred statement
             ps = conn.prepareStatement(sql);
 
-            // 3. Insert parameter value(s) into prepared statement, the bases start from 0
+            // 3. Insert parameter value(s) into prepared statement, the bases start from 1
             ps.setInt(1, year);
 
             // 4. Execute the prepared statement
@@ -89,17 +88,91 @@ public class JDBCTask2 implements JDBCTask2Interface {
 
     @Override
     public Collection<String> getJobCategoriesFromTitles(String searchString) {
-        return null;
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
+        Collection<String> result = new ArrayList<>();
+        try{
+            conn = getConnection();
+            String sql = """
+                SELECT c.job_category
+                FROM titles t
+                JOIN cast_info c ON t.title_id = c.title_id
+                WHERE t.primary_title LIKE ?
+                """;
+
+            ps = conn.prepareStatement(sql);
+
+            ps.setString(1, "%" + searchString + "%");
+
+            resultSet = ps.executeQuery();
+
+            while(resultSet.next()){
+                result.add(resultSet.getString("job_category"));
+            }
+        }catch(SQLException e){
+            throw new RuntimeException();
+        }
+        return result;
     }
 
     @Override
     public double getAverageRuntimeOfGenre(String genre) {
-        return 0;
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
+        Double result = 0.0;
+        try{
+            conn = getConnection();
+            String sql = """
+            SELECT AVG(CAST(t.runtime as float)) as runtime
+            FROM titles t
+            JOIN titles_genres c ON t.title_id = c.title_id
+            WHERE c.genre LIKE ?
+            """;
+
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, genre);
+
+            resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+                result = resultSet.getDouble("runtime");
+            }
+
+        }catch(SQLException e){
+            throw new RuntimeException();
+        }
+        return result;
     }
 
     @Override
     public Collection<String> getPlayedCharacters(String actorFullname) {
-        return null;
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
+        Collection<String> result = new ArrayList<>();
+        try{
+            conn = getConnection();
+            String sql = """
+            SELECT tpc.character_name
+            FROM persons p
+            JOIN title_person_character tpc ON p.person_id = tpc.person_id
+            WHERE p.full_name = ?
+            """;
+
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, actorFullname);
+
+            resultSet = ps.executeQuery();
+            while (resultSet.next()){
+                result.add(resultSet.getString("character_name"));
+            }
+
+        }catch(SQLException e){
+            throw new RuntimeException();
+        }
+        return result;
+
     }
 
 }
