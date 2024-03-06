@@ -18,7 +18,7 @@ public class JDBCTask2 implements JDBCTask2Interface {
         // Task 1: List all primary titles for a specific start year.
         try {
             j = new JDBCTask2();
-            Collection<String> result = j.getPlayedCharacters("Aamir Khan");
+            Collection<String> result = j.getPlayedCharacters("Aa mir Khan");
             Iterator<String> it = result.iterator();
             while(it.hasNext()){
                 System.out.println(it.next());

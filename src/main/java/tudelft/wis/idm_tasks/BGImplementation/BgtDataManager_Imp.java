@@ -59,6 +59,7 @@ public class BgtDataManager_Imp implements BgtDataManager {
         }
     }
 
+    //TODO : Aadi
     @Override
     public Player_Imp createNewPlayer(String name, String nickname) throws BgtException {
         Player_Imp player = new Player_Imp(name, nickname);
@@ -73,41 +74,49 @@ public class BgtDataManager_Imp implements BgtDataManager {
         return player;
     }
 
+    //TODO : Aadi
     @Override
     public Collection<Player> findPlayersByName(String name) throws BgtException {
         return null;
     }
 
+    //TODO : Aadi
     @Override
     public BoardGame createNewBoardgame(String name, String bggURL) throws BgtException {
         return null;
     }
 
+    //TODO: Satyam
     @Override
     public Collection<BoardGame> findGamesByName(String name) throws BgtException {
         return null;
     }
 
+    //TODO: Satyam
     @Override
     public PlaySession createNewPlaySession(Date date, Player host, BoardGame game, int playtime, Collection<Player> players, Player winner) throws BgtException {
         return null;
     }
 
+    //TODO: Satyam
     @Override
     public Collection<PlaySession> findSessionByDate(Date date) throws BgtException {
         return null;
     }
 
+    //TODO: Sil
     @Override
     public void persistPlayer(Player player) {
 
     }
 
+    //TODO: Sil
     @Override
     public void persistPlaySession(PlaySession session) {
 
     }
 
+    //TODO: Sil
     @Override
     public void persistBoardGame(BoardGame game) {
 
