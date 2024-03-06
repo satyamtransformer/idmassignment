@@ -55,7 +55,7 @@ public abstract class AbstractBGTDemo {
     /**
      * Returns an instance of BgtDataFactory which can create new BGT objects.
      *
-     * @return BgtDataManager instance
+     * @return BgtDataManager_Imp instance
      */
     public abstract BgtDataManager getBgtDataManager();
 
