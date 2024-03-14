@@ -4,10 +4,12 @@
  */
 package tudelft.wis.idm_tasks.boardGameTracker.interfaces;
 
+import tudelft.wis.idm_tasks.boardGameTracker.BgtException;
+
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Date;
-import tudelft.wis.idm_tasks.boardGameTracker.BgtException;
 
 // Add other necessary imports here
 
@@ -93,8 +95,7 @@ public interface BgtDataManager {
      * Persists a given player to the DB. Note that this player might already exist and only needs an update :-)
      * @param player the player
      */
-    public void persistPlayer(Player player);
-        // @TODO: Implement this method.
+    public void persistPlayer(Player player) throws BgtException;
 
     /**
      * Persists a given session to the DB. Note that this session might already exist and only needs an update :-)
@@ -107,7 +108,7 @@ public interface BgtDataManager {
      * Persists a given game to the DB. Note that this game might already exist and only needs an update :-)
      * @param game the game
      */
-    public void persistBoardGame(BoardGame game);
+    public void persistBoardGame(BoardGame game) throws BgtException;
         // @TODO: Implement this method.
 
 }

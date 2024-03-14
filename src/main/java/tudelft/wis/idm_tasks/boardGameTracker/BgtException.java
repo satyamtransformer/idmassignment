@@ -11,4 +11,6 @@ package tudelft.wis.idm_tasks.boardGameTracker;
  */
 public class BgtException extends Exception {
 
+    public BgtException(String s) {
+    }
 }

@@ -92,7 +92,7 @@ public class BgtDataManager_Imp implements BgtDataManager {
             ps.setString(2, nickname);
             ps.executeUpdate();
         }catch(SQLException e){
-            throw new BgtException();
+            throw new BgtException("text");
         }
 
         return player;
@@ -122,7 +122,7 @@ public class BgtDataManager_Imp implements BgtDataManager {
                 results.add(new Player_Imp(n, nn));
             }
         }catch(SQLException e){
-            throw new BgtException();
+            throw new BgtException("text");
         }
 
         return results;
@@ -147,7 +147,7 @@ public class BgtDataManager_Imp implements BgtDataManager {
             ps.setString(2, bggURL);
             ps.executeUpdate();
         }catch(SQLException e){
-            throw new BgtException();
+            throw new BgtException("text");
         }
 
         return game;
@@ -173,8 +173,25 @@ public class BgtDataManager_Imp implements BgtDataManager {
 
     //TODO: Sil
     @Override
-    public void persistPlayer(Player player) {
-
+    public void persistPlayer(Player player) throws BgtException {
+        PreparedStatement ps = null;
+        try {
+            conn = getConnection();
+            String sql = "INSERT INTO Player (name, nickName) VALUES (?, ?)";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, player.getPlayerName());
+            ps.setString(2, player.getPlayerNickName());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new BgtException("Error persisting player: " + e.getMessage());
+        } finally {
+            // Close resources
+            try {
+                if (ps != null) ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     //TODO: Sil
@@ -185,7 +202,24 @@ public class BgtDataManager_Imp implements BgtDataManager {
 
     //TODO: Sil
     @Override
-    public void persistBoardGame(BoardGame game) {
-
+    public void persistBoardGame(BoardGame game) throws BgtException {
+        PreparedStatement ps = null;
+        try {
+            conn = getConnection();
+            String sql = "INSERT INTO BoardGame (name, bggURL) VALUES (?, ?)";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, game.getName());
+            ps.setString(2, game.getBGG_URL());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new BgtException("Error persisting board game: " + e.getMessage());
+        } finally {
+            // Close resources
+            try {
+                if (ps != null) ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
