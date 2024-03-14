@@ -18,12 +18,24 @@ public class BgtDataManager_Imp implements BgtDataManager {
         this.conn = getConnection();
     }
 
-    public  Connection getConnection() throws SQLException {
+    public static void main(String[] args) {
+
+        try {
+            BgtDataManager_Imp t = new BgtDataManager_Imp();
+            t.createTables();
+        } catch (Exception e) {
+            System.out.println(e);
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public Connection getConnection() throws SQLException {
         if (conn == null) {
             String url = "jdbc:postgresql://localhost:5432/bgame";
             Properties props = new Properties();
             props.setProperty("user", "postgres");
-            props.setProperty("password", "Optimusprime11p"); // change with you local password
+            props.setProperty("password", "Satyam1234"); // change with you local password
             conn = DriverManager.getConnection(url, props);
         }
         return conn;
@@ -31,7 +43,7 @@ public class BgtDataManager_Imp implements BgtDataManager {
 
 
     public void createTables() throws SQLException{
-        Connection conn = null;
+        Connection conn = getConnection();
         PreparedStatement ps = null;
         ResultSet resultSet = null;
         Collection<String> pmTitle= new ArrayList<>();
@@ -39,22 +51,35 @@ public class BgtDataManager_Imp implements BgtDataManager {
         try{
             conn = getConnection();
             String sql = """
-
-
+                CREATE TABLE Player(
+                    player_id SERIAL PRIMARY KEY,
+                    name VARCHAR(100),
+                    nickName VARCHAR(100)
+                )
+        
+                CREATE TABLE BoardGame(
+                    game_id SERIAL PRIMARY KEY,
+                    name VARCHAR(100),
+                    bggURL VARCHAR(100)
+                )
+        
+                CREATE TABLE PlayedBy(
+                    player_id INT,
+                    game_id INT,
+                    FOREIGN KEY (player_id) REFERENCES Player(player_id),
+                    FOREIGN KEY (game_id) REFERENCES BoardGame(game_id),
+                    PRIMARY KEY (player_id, game_id)
+                )
 """; //TODO make a table for all entities in the database
 
-            String url = "jdbc:postgresql://localhost:5432/imdb";
-            Properties props = new Properties();
-            props.setProperty("user", "postgres");
-            props.setProperty("password", ""); // change with you local password
-            conn = DriverManager.getConnection(url, props);
 
             ps = conn.prepareStatement(sql);
             ps.executeQuery();
 
 
 
-        }catch(SQLException e){
+        }catch(Exception e){
+            System.out.println(e);
             throw new RuntimeException();
         }
     }
