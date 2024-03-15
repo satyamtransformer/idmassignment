@@ -1,4 +1,4 @@
-package tudelft.wis.idm_tasks.BGImplementation;
+package tudelft.wis.idm_tasks.BGJDBC;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license

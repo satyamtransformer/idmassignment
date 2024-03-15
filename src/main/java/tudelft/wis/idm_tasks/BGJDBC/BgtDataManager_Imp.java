@@ -1,4 +1,4 @@
-package tudelft.wis.idm_tasks.BGImplementation;
+package tudelft.wis.idm_tasks.BGJDBC;
 
 import tudelft.wis.idm_tasks.boardGameTracker.BgtException;
 import tudelft.wis.idm_tasks.boardGameTracker.interfaces.BgtDataManager;
