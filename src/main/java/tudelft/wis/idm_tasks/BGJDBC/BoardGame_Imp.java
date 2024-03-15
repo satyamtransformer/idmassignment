@@ -1,4 +1,4 @@
-package tudelft.wis.idm_tasks.BGImplementation;
+package tudelft.wis.idm_tasks.BGJDBC;
 import tudelft.wis.idm_tasks.boardGameTracker.interfaces.BoardGame;
 
 public class BoardGame_Imp implements BoardGame {
