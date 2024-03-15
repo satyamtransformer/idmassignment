@@ -58,5 +58,10 @@ public class Player_Imp implements Player {
         return result;
     }
 
+    @Override
+    public int getPlayerId() {
+        return 0;
+    }
+
 }
 

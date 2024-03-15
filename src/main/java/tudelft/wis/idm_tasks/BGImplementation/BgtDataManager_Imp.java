@@ -156,16 +156,44 @@ public class BgtDataManager_Imp implements BgtDataManager {
     //TODO: Satyam
     @Override
     public Collection<BoardGame> findGamesByName(String name) throws BgtException {
-        return null;
+        List<BoardGame> results = new ArrayList<>();
+
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
+
+        try {
+            conn = getConnection();
+            String sql = "SELECT * FROM BoardGame WHERE name = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, name);
+            resultSet = ps.executeQuery();
+
+            while (resultSet.next()) {
+                String gameName = resultSet.getString("name");
+                String bggURL = resultSet.getString("bggURL");
+                results.add(new BoardGame_Imp(gameName, bggURL));
+            }
+        } catch (SQLException e) {
+            throw new BgtException(e.getMessage());
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (ps != null) ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return results;
     }
 
-    //TODO: Satyam
+    //TODO: Implement if time
     @Override
     public PlaySession createNewPlaySession(Date date, Player host, BoardGame game, int playtime, Collection<Player> players, Player winner) throws BgtException {
-        return null;
+       return null;
     }
 
-    //TODO: Satyam
+    //TODO: Implement if time
     @Override
     public Collection<PlaySession> findSessionByDate(Date date) throws BgtException {
         return null;
