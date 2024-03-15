@@ -43,6 +43,8 @@ public interface Player {
      * @return the string representation of the object
      */
     public String toVerboseString();
-        // @TODO: Implement this method.
+
+    int getPlayerId();
+    // @TODO: Implement this method.
     
 }
