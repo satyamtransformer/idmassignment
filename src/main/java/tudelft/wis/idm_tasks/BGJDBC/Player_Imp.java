@@ -22,8 +22,6 @@ import tudelft.wis.idm_tasks.boardGameTracker.interfaces.Player;
  */
 public class Player_Imp implements Player {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
     private String nickName;

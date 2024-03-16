@@ -5,8 +5,7 @@ import jakarta.persistence.Id;
 import tudelft.wis.idm_tasks.boardGameTracker.interfaces.BoardGame;
 
 public class BoardGame_Imp implements BoardGame {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private int id;
     /**
      * The Name.

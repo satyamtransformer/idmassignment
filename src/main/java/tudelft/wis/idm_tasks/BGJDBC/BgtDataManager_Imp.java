@@ -85,14 +85,23 @@ public class BgtDataManager_Imp implements BgtDataManager {
         try{
             conn = getConnection();
             String sql = """
-            INSERT INTO Player (player_id, name, nickName)
-            VALUES(?, ?, ?);
+            INSERT INTO Player (name, nickName)
+            VALUES(?, ?);
              """;
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, player.getPlayerId());
-            ps.setString(2, name);
-            ps.setString(3, nickname);
+            ps.setString(1, name);
+            ps.setString(2, nickname);
             ps.executeUpdate();
+
+            sql = "SELECT p.player_id FROM Player p WHERE p.name = ? AND p.nickName = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, name);
+            ps.setString(2, nickname);
+            ResultSet idResult = ps.executeQuery();
+            while(idResult.next()){
+                int id = idResult.getInt("player_id");
+                player = new Player_Imp(id, player.getPlayerName(), player.getPlayerNickName());
+            }
         }catch(SQLException e){
             throw new BgtException("text");
         }
@@ -122,7 +131,28 @@ public class BgtDataManager_Imp implements BgtDataManager {
                 String n = resultSet.getString("name");
                 String nn = resultSet.getString("nickName");
                 int id = resultSet.getInt("player_id");
-                results.add(new Player_Imp(id, n, nn));
+                Player p = new Player_Imp(id, n, nn);
+                // Now we load all the gameCollection.
+                sql = """
+                    SELECT *
+                    FROM BoardGame bg
+                    WHERE EXISTS(
+                        SELECT *
+                        FROM PlayedBy pb
+                        WHERE pb.game_id = bg.game_id AND pb.player_id = ?
+                    );
+                     """;
+                ps = conn.prepareStatement(sql);
+                ps.setInt(1, id);
+                ResultSet games = ps.executeQuery();
+                while(games.next()){
+                    int g_id = games.getInt("game_id");
+                    String g_name = games.getString("name");
+                    String url = games.getString("bggURL");
+                    BoardGame bg = new BoardGame_Imp(g_id, g_name, url);
+                    p.getGameCollection().add(bg);
+                }
+                results.add(p);
             }
         }catch(SQLException e){
             throw new BgtException("text");
@@ -149,14 +179,23 @@ public class BgtDataManager_Imp implements BgtDataManager {
         try{
             conn = getConnection();
             String sql = """
-            INSERT INTO BoardGame (game_id, name, bggURL)
-            VALUES(?, ?, ?);
+            INSERT INTO BoardGame (name, bggURL)
+            VALUES(?, ?);
              """;
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, game.getGameId());
-            ps.setString(2, name);
-            ps.setString(3, bggURL);
+            ps.setString(1, name);
+            ps.setString(2, bggURL);
             ps.executeUpdate();
+
+            sql = "SELECT g.game_id FROM BoardGame g WHERE g.name = ? AND g.bggURL = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, name);
+            ps.setString(2, bggURL);
+            ResultSet idResult = ps.executeQuery();
+            while(idResult.next()){
+                int id = idResult.getInt("game_id");
+                game = new BoardGame_Imp(id, name, bggURL);
+            }
         }catch(SQLException e){
             throw new BgtException("text");
         }
