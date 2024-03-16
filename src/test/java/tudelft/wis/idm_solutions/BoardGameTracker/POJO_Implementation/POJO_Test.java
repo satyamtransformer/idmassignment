@@ -84,7 +84,7 @@ public class POJO_Test extends tudelft.wis.idm_solutions.BoardGameTracker.Abstra
 
         // Add the game again
         hostFromDB.getGameCollection().add(firstGame);
-        this.getBgtDataManager().persistPlayer(host);
+        this.getBgtDataManager().persistPlayer(hostFromDB);
 
         // Load the host again from DB
         Player hostFromDB2 = this.getBgtDataManager().findPlayersByName(host.getPlayerName()).iterator().next();
