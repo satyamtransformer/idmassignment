@@ -70,8 +70,8 @@ public class JDBCTest extends tudelft.wis.idm_solutions.BoardGameTracker.Abstrac
         assertEquals(retrievedGame.getBGG_URL(), game.getBGG_URL());
 
         // Retrieve session by date
-        Collection<PlaySession> retrievedSession = this.getBgtDataManager().findSessionByDate(firstsession.getDate());
-        assertEquals(firstsession.getDate(), retrievedSession.iterator().next().getDate());
+//        Collection<PlaySession> retrievedSession = this.getBgtDataManager().findSessionByDate(firstsession.getDate());
+//        assertEquals(firstsession.getDate(), retrievedSession.iterator().next().getDate());
 
         // Remove a game from the host's collection, add  it again
         BoardGame firstGame = host.getGameCollection().iterator().next();

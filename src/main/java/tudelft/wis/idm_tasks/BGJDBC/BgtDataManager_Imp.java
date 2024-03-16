@@ -263,14 +263,29 @@ public class BgtDataManager_Imp implements BgtDataManager {
     @Override
     public void persistPlayer(Player player) throws BgtException {
         PreparedStatement ps = null;
+        String sql = null;
         try {
             conn = getConnection();
-            // We need to now add to PlayedBy.
+            // First we update player if necessary
+            sql = "UPDATE Player SET name = ?, nickName = ? WHERE player_id = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, player.getPlayerName());
+            ps.setString(2, player.getPlayerNickName());
+            ps.setInt(3, player.getPlayerId());
+            ps.executeUpdate();
+
+            // We could remove all from playedby with p.id and then insert new ones.
+            sql = "DELETE FROM PlayedBy pb WHERE pb.player_id = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1,player.getPlayerId());
+            ps.executeUpdate();
+
+            // We need to now update to PlayedBy.
             for(BoardGame b:player.getGameCollection()){
                 BoardGame_Imp bg = (BoardGame_Imp)b;
-                String sql = "INSERT INTO PlayedBy(player_id, game_id) VALUES (?,?)";
+                sql = "INSERT INTO PlayedBy(player_id, game_id) VALUES (?,?)";
                 ps = conn.prepareStatement(sql);
-                ps.setInt(1,player.getPlayerId());
+                ps.setInt(1, player.getPlayerId());
                 ps.setInt(2, bg.getGameId());
                 ps.executeUpdate();
             }
