@@ -45,7 +45,7 @@ public class JDBCTask2 implements JDBCTask2Interface {
             String url = "jdbc:postgresql://localhost:5432/imdb";
             Properties props = new Properties();
             props.setProperty("user", "postgres");
-            props.setProperty("password", ""); // change with you local password
+            props.setProperty("password", "Lepel3400SQL"); // change with you local password
             conn = DriverManager.getConnection(url, props);
         }
         return conn;

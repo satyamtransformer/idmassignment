@@ -33,7 +33,7 @@ public class BgtDataManager_Imp implements BgtDataManager {
             String url = "jdbc:postgresql://localhost:5432/bgame";
             Properties props = new Properties();
             props.setProperty("user", "postgres");
-            props.setProperty("password", "Optimusprime11p"); // change with you local password
+            props.setProperty("password", "Lepel3400SQL"); // change with you local password
             conn = DriverManager.getConnection(url, props);
         }
         return conn;
@@ -263,23 +263,59 @@ public class BgtDataManager_Imp implements BgtDataManager {
     @Override
     public void persistPlayer(Player player) throws BgtException {
         PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
             conn = getConnection();
-            // We need to now add to PlayedBy.
-            for(BoardGame b:player.getGameCollection()){
-                BoardGame_Imp bg = (BoardGame_Imp)b;
-                String sql = "INSERT INTO PlayedBy(player_id, game_id) VALUES (?,?)";
-                ps = conn.prepareStatement(sql);
-                ps.setInt(1,player.getPlayerId());
-                ps.setInt(2, bg.getGameId());
+            String selectPlayerSql = "SELECT COUNT(*) FROM Player WHERE id = ?";
+            ps = conn.prepareStatement(selectPlayerSql);
+            ps.setInt(1, player.getPlayerId());
+            rs = ps.executeQuery();
+            rs.next();
+            int playerCount = rs.getInt(1);
+            if (playerCount > 0) {
+                String updatePlayerSql = "UPDATE Player SET name = ? WHERE id = ?";
+                ps = conn.prepareStatement(updatePlayerSql);
+                ps.setString(1, player.getPlayerName());
+                ps.setInt(2, player.getPlayerId());
                 ps.executeUpdate();
+                for (BoardGame b : player.getGameCollection()) {
+                    BoardGame_Imp bg = (BoardGame_Imp) b;
+                    String selectPlayedBySql = "SELECT COUNT(*) FROM PlayedBy WHERE player_id = ? AND game_id = ?";
+                    ps = conn.prepareStatement(selectPlayedBySql);
+                    ps.setInt(1, player.getPlayerId());
+                    ps.setInt(2, bg.getGameId());
+                    rs = ps.executeQuery();
+                    rs.next();
+                    int associationCount = rs.getInt(1);
+                    if (associationCount == 0) {
+                        String insertPlayedBySql = "INSERT INTO PlayedBy (player_id, game_id) VALUES (?, ?)";
+                        ps = conn.prepareStatement(insertPlayedBySql);
+                        ps.setInt(1, player.getPlayerId());
+                        ps.setInt(2, bg.getGameId());
+                        ps.executeUpdate();
+                    }
+                }
+            } else {
+                String insertPlayerSql = "INSERT INTO Player (id, name) VALUES (?, ?)";
+                ps = conn.prepareStatement(insertPlayerSql);
+                ps.setInt(1, player.getPlayerId());
+                ps.setString(2, player.getPlayerName());
+                ps.executeUpdate();
+                for (BoardGame b : player.getGameCollection()) {
+                    BoardGame_Imp bg = (BoardGame_Imp) b;
+                    String insertPlayedBySql = "INSERT INTO PlayedBy (player_id, game_id) VALUES (?, ?)";
+                    ps = conn.prepareStatement(insertPlayedBySql);
+                    ps.setInt(1, player.getPlayerId());
+                    ps.setInt(2, bg.getGameId());
+                    ps.executeUpdate();
+                }
             }
         } catch (SQLException e) {
             throw new BgtException("Error persisting player: " + e.getMessage());
         } finally {
-            // Close resources
             try {
                 if (ps != null) ps.close();
+                if (rs != null) rs.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -296,19 +332,33 @@ public class BgtDataManager_Imp implements BgtDataManager {
     @Override
     public void persistBoardGame(BoardGame game) throws BgtException {
         PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
             conn = getConnection();
-            String sql = "INSERT INTO BoardGame (name, bggURL) VALUES (?, ?)";
-            ps = conn.prepareStatement(sql);
+            String selectSql = "SELECT id FROM BoardGame WHERE name = ?";
+            ps = conn.prepareStatement(selectSql);
             ps.setString(1, game.getName());
-            ps.setString(2, game.getBGG_URL());
-            ps.executeUpdate();
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int gameId = rs.getInt("id");
+                String updateSql = "UPDATE BoardGame SET bggURL = ? WHERE id = ?";
+                ps = conn.prepareStatement(updateSql);
+                ps.setString(1, game.getBGG_URL());
+                ps.setInt(2, gameId);
+                ps.executeUpdate();
+            } else {
+                String insertSql = "INSERT INTO BoardGame (name, bggURL) VALUES (?, ?)";
+                ps = conn.prepareStatement(insertSql);
+                ps.setString(1, game.getName());
+                ps.setString(2, game.getBGG_URL());
+                ps.executeUpdate();
+            }
         } catch (SQLException e) {
             throw new BgtException("Error persisting board game: " + e.getMessage());
         } finally {
-            // Close resources
             try {
                 if (ps != null) ps.close();
+                if (rs != null) rs.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
