@@ -7,6 +7,10 @@ package tudelft.wis.idm_tasks.BGJDBC;
 
 import java.util.Collection;
 import java.util.LinkedList;
+
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import tudelft.wis.idm_tasks.boardGameTracker.interfaces.BoardGame;
 import tudelft.wis.idm_tasks.boardGameTracker.interfaces.Player;
 
@@ -18,6 +22,9 @@ import tudelft.wis.idm_tasks.boardGameTracker.interfaces.Player;
  */
 public class Player_Imp implements Player {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private String name;
     private String nickName;
     private Collection<BoardGame> gameCollection = new LinkedList<BoardGame>();
@@ -29,6 +36,12 @@ public class Player_Imp implements Player {
      * @param nickName nickname
      */
     public Player_Imp(String name, String nickName) {
+        this.name = name;
+        this.nickName = nickName;
+    }
+
+    public Player_Imp(int id, String name, String nickName) {
+        this.id = id;
         this.name = name;
         this.nickName = nickName;
     }
@@ -60,7 +73,7 @@ public class Player_Imp implements Player {
 
     @Override
     public int getPlayerId() {
-        return 0;
+        return this.id;
     }
 
 }

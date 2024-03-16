@@ -16,9 +16,6 @@ import jakarta.persistence.*;
 @Table
 public class BoardGame implements tudelft.wis.idm_tasks.boardGameTracker.interfaces.BoardGame {
 
-
-
-
     /**
      * The Name.
      */

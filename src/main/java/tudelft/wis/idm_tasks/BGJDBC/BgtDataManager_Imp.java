@@ -33,7 +33,7 @@ public class BgtDataManager_Imp implements BgtDataManager {
             String url = "jdbc:postgresql://localhost:5432/bgame";
             Properties props = new Properties();
             props.setProperty("user", "postgres");
-            props.setProperty("password", "Satyam1234"); // change with you local password
+            props.setProperty("password", "Optimusprime11p"); // change with you local password
             conn = DriverManager.getConnection(url, props);
         }
         return conn;
@@ -85,12 +85,13 @@ public class BgtDataManager_Imp implements BgtDataManager {
         try{
             conn = getConnection();
             String sql = """
-            INSERT INTO Player (name, nickName)
-            VALUES(?, ?);
+            INSERT INTO Player (player_id, name, nickName)
+            VALUES(?, ?, ?);
              """;
             ps = conn.prepareStatement(sql);
-            ps.setString(1, name);
-            ps.setString(2, nickname);
+            ps.setInt(1, player.getPlayerId());
+            ps.setString(2, name);
+            ps.setString(3, nickname);
             ps.executeUpdate();
         }catch(SQLException e){
             throw new BgtException("text");
@@ -120,7 +121,8 @@ public class BgtDataManager_Imp implements BgtDataManager {
             while(resultSet.next()){
                 String n = resultSet.getString("name");
                 String nn = resultSet.getString("nickName");
-                results.add(new Player_Imp(n, nn));
+                int id = resultSet.getInt("player_id");
+                results.add(new Player_Imp(id, n, nn));
             }
         }catch(SQLException e){
             throw new BgtException("text");
@@ -138,7 +140,7 @@ public class BgtDataManager_Imp implements BgtDataManager {
 
     @Override
     public BoardGame createNewBoardgame(String name, String bggURL) throws BgtException {
-        BoardGame game = new BoardGame_Imp(name, bggURL);
+        BoardGame_Imp game = new BoardGame_Imp(name, bggURL);
 
         PreparedStatement ps = null;
         ResultSet resultSet = null;
@@ -147,12 +149,13 @@ public class BgtDataManager_Imp implements BgtDataManager {
         try{
             conn = getConnection();
             String sql = """
-            INSERT INTO BoardGame (name, bggURL)
-            VALUES(?, ?);
+            INSERT INTO BoardGame (game_id, name, bggURL)
+            VALUES(?, ?, ?);
              """;
             ps = conn.prepareStatement(sql);
-            ps.setString(1, name);
-            ps.setString(2, bggURL);
+            ps.setInt(1, game.getGameId());
+            ps.setString(2, name);
+            ps.setString(3, bggURL);
             ps.executeUpdate();
         }catch(SQLException e){
             throw new BgtException("text");
@@ -179,7 +182,8 @@ public class BgtDataManager_Imp implements BgtDataManager {
             while (resultSet.next()) {
                 String gameName = resultSet.getString("name");
                 String bggURL = resultSet.getString("bggURL");
-                results.add(new BoardGame_Imp(gameName, bggURL));
+                int id = resultSet.getInt("game_id");
+                results.add(new BoardGame_Imp(id, gameName, bggURL));
             }
         } catch (SQLException e) {
             throw new BgtException(e.getMessage());
@@ -216,17 +220,21 @@ public class BgtDataManager_Imp implements BgtDataManager {
         return null;
     }
 
-    //TODO: Sil
+    //TODO DONE: FIXED THIS
     @Override
     public void persistPlayer(Player player) throws BgtException {
         PreparedStatement ps = null;
         try {
             conn = getConnection();
-            String sql = "INSERT INTO Player (name, nickName) VALUES (?, ?)";
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, player.getPlayerName());
-            ps.setString(2, player.getPlayerNickName());
-            ps.executeUpdate();
+            // We need to now add to PlayedBy.
+            for(BoardGame b:player.getGameCollection()){
+                BoardGame_Imp bg = (BoardGame_Imp)b;
+                String sql = "INSERT INTO PlayedBy(player_id, game_id) VALUES (?,?)";
+                ps = conn.prepareStatement(sql);
+                ps.setInt(1,player.getPlayerId());
+                ps.setInt(2, bg.getGameId());
+                ps.executeUpdate();
+            }
         } catch (SQLException e) {
             throw new BgtException("Error persisting player: " + e.getMessage());
         } finally {
