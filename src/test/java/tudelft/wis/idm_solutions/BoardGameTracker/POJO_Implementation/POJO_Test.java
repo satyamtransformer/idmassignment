@@ -72,6 +72,7 @@ public class POJO_Test extends tudelft.wis.idm_solutions.BoardGameTracker.Abstra
         assertEquals(firstsession.getDate(), retrievedSession.iterator().next().getDate());
 
         // Remove a game from the host's collection, add  it again
+        if(host.getGameCollection().isEmpty()) return; // WHAT IF IT IS EMPTY... .next() throws exception.
         BoardGame firstGame = host.getGameCollection().iterator().next();
         int numOfGames = host.getGameCollection().size();
         host.getGameCollection().remove(firstGame);

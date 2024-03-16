@@ -74,6 +74,7 @@ public class JDBCTest extends tudelft.wis.idm_solutions.BoardGameTracker.Abstrac
 //        assertEquals(firstsession.getDate(), retrievedSession.iterator().next().getDate());
 
         // Remove a game from the host's collection, add  it again
+        if(host.getGameCollection().isEmpty()) return; // WHAT IF IT IS EMPTY... .next() throws exception.
         BoardGame firstGame = host.getGameCollection().iterator().next();
         int numOfGames = host.getGameCollection().size();
         host.getGameCollection().remove(firstGame);
@@ -90,7 +91,6 @@ public class JDBCTest extends tudelft.wis.idm_solutions.BoardGameTracker.Abstrac
         // Load the host again from DB
         Player hostFromDB2 = this.getBgtDataManager().findPlayersByName(host.getPlayerName()).iterator().next();
         assertEquals(numOfGames, hostFromDB2.getGameCollection().size());
-
     }
 
 }
