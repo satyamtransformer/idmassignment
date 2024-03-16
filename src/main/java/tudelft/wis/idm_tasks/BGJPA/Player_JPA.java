@@ -23,7 +23,7 @@ public class Player_JPA implements Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private int id;
     private String name;
     private String nickName;
     @OneToMany
@@ -44,11 +44,11 @@ public class Player_JPA implements Player {
 
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -95,6 +95,11 @@ public class Player_JPA implements Player {
             result = result + " (" + nickName + ")";
         }
         return result;
+    }
+
+    @Override
+    public int getPlayerId() {
+        return this.id;
     }
 
 }

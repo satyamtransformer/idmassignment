@@ -17,9 +17,8 @@ import tudelft.wis.idm_tasks.boardGameTracker.interfaces.BoardGame;
 @Table
 public class BoardGame_JPA implements BoardGame {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long ID;
+
+
 
     /**
      * The Name.
@@ -28,18 +27,11 @@ public class BoardGame_JPA implements BoardGame {
     /**
      * The BoardGameGeek.com URL of the boardgame.
      */
+    @Id
     String bggURL;
 
     public BoardGame_JPA() {
 
-    }
-
-    public Long getID() {
-        return ID;
-    }
-
-    public void setID(Long ID) {
-        this.ID = ID;
     }
 
     @Override

@@ -17,6 +17,7 @@ import tudelft.wis.idm_tasks.boardGameTracker.interfaces.Player;
  */
 public class Player_POJO implements Player {
 
+    private int ID;
     private String name;
     private String nickName;
     private Collection<BoardGame> gameCollection = new LinkedList<BoardGame>();
@@ -31,6 +32,7 @@ public class Player_POJO implements Player {
         this.name = name;
         this.nickName = nickName;
     }
+
 
     @Override
     public String getPlayerName() {
@@ -56,5 +58,11 @@ public class Player_POJO implements Player {
         }
         return result;
     }
+
+    @Override
+    public int getPlayerId() {
+        return this.ID;
+    }
+
 
 }

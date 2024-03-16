@@ -32,7 +32,7 @@ public class BgtDataManager_Imp implements BgtDataManager {
             String url = "jdbc:postgresql://localhost:5432/bgame";
             Properties props = new Properties();
             props.setProperty("user", "postgres");
-            props.setProperty("password", ""); // change with you local password
+            props.setProperty("password", "Satyam1234"); // change with you local password
             conn = DriverManager.getConnection(url, props);
         }
         return conn;
