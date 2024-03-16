@@ -6,7 +6,6 @@ package tudelft.wis.idm_tasks.BGJPA;
 
 import jakarta.persistence.*;
 import tudelft.wis.idm_tasks.boardGameTracker.interfaces.BoardGame;
-import tudelft.wis.idm_tasks.boardGameTracker.interfaces.PlaySession;
 import tudelft.wis.idm_tasks.boardGameTracker.interfaces.Player;
 
 import java.util.Collection;
@@ -20,7 +19,7 @@ import java.util.Date;
  */
 @Entity
 @Table
-public class PlaySession_JPA implements PlaySession {
+public class PlaySession implements tudelft.wis.idm_tasks.boardGameTracker.interfaces.PlaySession {
 
     @Id
     private Long id;
@@ -36,7 +35,7 @@ public class PlaySession_JPA implements PlaySession {
     private Player winner;
 
 
-    public PlaySession_JPA() {
+    public PlaySession() {
 
     }
 
@@ -102,7 +101,7 @@ public class PlaySession_JPA implements PlaySession {
      * @param players  the players
      * @param winner   the winner
      */
-    public PlaySession_JPA(Date date, Player host, BoardGame game, int playTime, Collection<Player> players, Player winner) {
+    public PlaySession(Date date, Player host, BoardGame game, int playTime, Collection<Player> players, Player winner) {
         this.date = date;
         this.host = host;
         this.game = game;

@@ -1,40 +1,28 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
- */
 package tudelft.wis.idm_solutions.BoardGameTracker.POJO_Implementation;
 
 import org.junit.jupiter.api.Test;
 import org.tinylog.Logger;
-import tudelft.wis.idm_tasks.BGJDBC.BgtDataManager_Imp;
+import tudelft.wis.idm_tasks.BGJPA.BgtDataManager;
 import tudelft.wis.idm_tasks.boardGameTracker.BgtException;
-import tudelft.wis.idm_tasks.boardGameTracker.interfaces.BgtDataManager;
-import tudelft.wis.idm_tasks.boardGameTracker.interfaces.BoardGame;
-import tudelft.wis.idm_tasks.boardGameTracker.interfaces.PlaySession;
-import tudelft.wis.idm_tasks.boardGameTracker.interfaces.Player;
+import tudelft.wis.idm_tasks.boardGameTracker.interfaces.*;
 
 import java.sql.SQLException;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * The type POJO test.
- *
- * @author Christoph Lofi, Alexandra Neagu
- */
-public class JDBCTest extends tudelft.wis.idm_solutions.BoardGameTracker.AbstractBGTDemo {
+public class JPATest extends tudelft.wis.idm_solutions.BoardGameTracker.AbstractBGTDemo{
 
     /**
      * Instantiates a new POJO test.
      */
-    public JDBCTest() throws SQLException {
+    public JPATest() throws SQLException {
     }
 
-    private BgtDataManager_Imp dataManager = new BgtDataManager_Imp();
+    private BgtDataManager dataManager = new BgtDataManager();
 
     @Override
-    public BgtDataManager getBgtDataManager() {
+    public tudelft.wis.idm_tasks.boardGameTracker.interfaces.BgtDataManager getBgtDataManager() {
         return dataManager;
     }
 
@@ -92,5 +80,4 @@ public class JDBCTest extends tudelft.wis.idm_solutions.BoardGameTracker.Abstrac
         assertEquals(numOfGames, hostFromDB2.getGameCollection().size());
 
     }
-
 }

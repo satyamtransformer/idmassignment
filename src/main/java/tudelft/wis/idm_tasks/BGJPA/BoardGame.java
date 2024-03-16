@@ -5,7 +5,6 @@
 package tudelft.wis.idm_tasks.BGJPA;
 
 import jakarta.persistence.*;
-import tudelft.wis.idm_tasks.boardGameTracker.interfaces.BoardGame;
 
 /**
  * POJO (Plain Old Java Object) Implementation without any database
@@ -15,7 +14,7 @@ import tudelft.wis.idm_tasks.boardGameTracker.interfaces.BoardGame;
  */
 @Entity
 @Table
-public class BoardGame_JPA implements BoardGame {
+public class BoardGame implements tudelft.wis.idm_tasks.boardGameTracker.interfaces.BoardGame {
 
 
 
@@ -30,7 +29,7 @@ public class BoardGame_JPA implements BoardGame {
     @Id
     String bggURL;
 
-    public BoardGame_JPA() {
+    public BoardGame() {
 
     }
 
@@ -55,7 +54,7 @@ public class BoardGame_JPA implements BoardGame {
      * @param name   the name
      * @param bggURL the BoardGameGeek.com URL of the boardgame
      */
-    public BoardGame_JPA(String name, String bggURL) {
+    public BoardGame(String name, String bggURL) {
         this.name = name;
         this.bggURL = bggURL;
     }

@@ -1,5 +1,6 @@
 package tudelft.wis.idm_tasks.BGJDBC;
 
+import tudelft.wis.idm_solutions.BoardGameTracker.POJO_Implementation.PlaySession_Imp;
 import tudelft.wis.idm_tasks.boardGameTracker.BgtException;
 import tudelft.wis.idm_tasks.boardGameTracker.interfaces.BgtDataManager;
 import tudelft.wis.idm_tasks.boardGameTracker.interfaces.BoardGame;
@@ -123,6 +124,13 @@ public class BgtDataManager_Imp implements BgtDataManager {
             }
         }catch(SQLException e){
             throw new BgtException("text");
+        } finally {
+            // Close resources
+            try {
+                if (ps != null) ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return results;
@@ -190,7 +198,16 @@ public class BgtDataManager_Imp implements BgtDataManager {
     //TODO: Implement if time
     @Override
     public PlaySession createNewPlaySession(Date date, Player host, BoardGame game, int playtime, Collection<Player> players, Player winner) throws BgtException {
-       return null;
+        if (date == null || host == null || game == null || players == null) {
+            throw new IllegalArgumentException("Date, host, game, and players cannot be null");
+        }
+
+        PlaySession_Imp session = new PlaySession_Imp(date, host, game, playtime, players, winner);
+
+        // Here you would typically persist the session in the database
+        // Example: databaseManager.persistPlaySession(session);
+
+        return session;
     }
 
     //TODO: Implement if time

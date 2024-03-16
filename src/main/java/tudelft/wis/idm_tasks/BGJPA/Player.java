@@ -6,10 +6,9 @@ package tudelft.wis.idm_tasks.BGJPA;
 
 import jakarta.persistence.*;
 import tudelft.wis.idm_tasks.boardGameTracker.interfaces.BoardGame;
-import tudelft.wis.idm_tasks.boardGameTracker.interfaces.Player;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
 /**
  * POJO (Plain Old Java Object) Implementation without any database
@@ -19,7 +18,7 @@ import java.util.LinkedList;
  */
 @Entity
 @Table
-public class Player_JPA implements Player {
+public class Player implements tudelft.wis.idm_tasks.boardGameTracker.interfaces.Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,7 +26,7 @@ public class Player_JPA implements Player {
     private String name;
     private String nickName;
     @OneToMany
-    private Collection<BoardGame> gameCollection;
+    private Collection<BoardGame> gameCollection = new ArrayList<>();
 
     /**
      * Instantiates a new Player POJO.
@@ -35,12 +34,12 @@ public class Player_JPA implements Player {
      * @param name     name
      * @param nickName nickname
      */
-    public Player_JPA(String name, String nickName) {
+    public Player(String name, String nickName) {
         this.name = name;
         this.nickName = nickName;
     }
 
-    public Player_JPA() {
+    public Player() {
 
     }
 
